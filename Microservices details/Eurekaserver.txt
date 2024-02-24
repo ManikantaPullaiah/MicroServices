@@ -1,0 +1,85 @@
+Service Registry:-
+==================
+ -> we are adding Service Registry Server (Eureka).
+ 
+ -> In Microservices,if a services host/port is changed then communication b/w services will be failed.
+  
+ -> To avoid this problem,we have service registry server like eureka server.
+
+ -> The Services will be registered with Register Server with an application name and they can find the host or port of the other services with that application name.
+
+ -> To create a Registry Server application,we use spring cloud netflix eureka component.
+
+ -> By default port number is 8761 for eureka server.
+
+ 
+Step-1) Create a SB application with below dependencies
+           a) Web
+           b) devtools
+           c) Eureka Server
+
+Step-2) Enable EureksServer in @SpringBootApplication Class
+          @SpringBootApplication
+          @EnableEurekaServer
+
+Step-3) Add configuration properties in application.properties file.
+          server:
+           port: 8761
+  
+	eureka:
+           instance:
+             hostname: localhost
+           client:
+             register-with-eureka: false
+             fetch-registry: false
+             serviceUrl:
+               defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+
+
+            (OR)
+
+          server.port=8761
+
+	eureka.instance.hostname=localhost
+	eureka.client.register-with-eureka=false
+	eureka.fetch-registry=false
+	eureka.serviceUrl.defaultZone=http://${eureka.instance.hostname}:${server.port}/eureka/
+
+Step-4) Run as SB application
+
+Step-5) Access the application using below url
+        http://localhost:8761/
+
+Step-6) add EurekaDiscoveryClient to all microservices
+               RightClick (Applicarion)->Spring->Add Starter->EurekaClient
+
+Step-7) add @EurekaDiscoveryClient in remaing microservices except eureka server application.
+             @SpringBootApplication
+             @EnableDiscoveryClient
+     
+         -> configure all properties in application.properties file.
+ 
+        Spring.application.name=CUSTOMER-SERVICE
+        eureka.client.service-url.defaultZone=http://localhost:8761/eureka
+
+Step-8) Run as all microservice applications.
+
+Step-9) All microservices should be register in Eureka Server.
+
+--------------------------------------------------------------------------------------------------------------------------------
+-> When ever we are created new instance it will automatically registered in Eureka Server
+-> When ever we stop the instance it will remove from the eureka server
+
+Step-1) Create a Instance for Microservice application
+
+         -> Select the application --> Run as--> Run configuration -> 
+           Name: 03-Friend-Service - Application-Instance2
+           Environment (Add): server.port=30001
+------------------------------------------------------------------------------------------------------------------------------
+-> Each and every service will be registerd in Eureka registry with an application name ,this name can be configured with spring.application.name property
+   in application.properties file of each service.
+ 
+
+
+

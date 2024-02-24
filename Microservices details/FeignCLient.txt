@@ -1,0 +1,87 @@
+Feign Client:-
+=============
+ [ -> Just Create a interface to get communication with other microservices
+   -> Feign Client implicity provide load balancing ]
+-> In Microservices,Service to service communcaion can be provided in two ways.
+      1) using Rest Template
+      2) using Feign Clients
+
+[-> using RestTemplate .we should know the resttemplate methods
+   ->If load balancing increasing we have to provide explicitly ]
+
+-> with RestTemplate class,you should know about it's methods and their arguments and also it provides synchronouscommunication and it doesn't perform load balancing automatically.
+   when multiple instances of another service are executing
+
+-> With Feign client you can define a contract(interface) with required metho declarations and feign component provides proxy implementation at run time for the contract and also it provides as 
+  synchronus/asynchrounus communication and implicit load balancing through spring cloud load balancer.
+
+-> To include Feign client in your project use the starter with group org.springframework.cloud and artifact id spring-cloud starter-openfeign
+
+-> Use @FeignClient to mark an interface as a feign client for a specific service,by providing that service name as a value to the annotation.
+
+Step-1) Add openfeign starter to the customer-service application
+           open-feign
+
+Step-2) Add @EnableFeignClients annotaion in springbootapplication
+
+           @SpringBootApplication
+	   @EnableDiscoveryClient
+           @EnableFeignClients
+           public class Application {
+
+Step-3) Create a Sperate interface.
+
+         @FeignClient(value="PLANS-SERVICE")
+	public interface PlanProxy {
+	
+	@GetMapping("/plans")
+	public ResponseEntity<Plans> getPlansById(@RequestParam Integer planId) ;
+
+	}
+
+       @FeignClient(value = "FRIENDS-SERVICE")
+	public interface FriendProxy {
+
+	@GetMapping("/api/friends/{phoneNumber}")
+	public ResponseEntity<List<Long>> getFriendsPhoneNumber(@PathVariable Long phoneNumber);
+
+     }
+
+Step-4) add login controller class
+     
+         @Autowired
+	PlanProxy planProxy;
+	
+	@Autowired
+	FriendProxy friendPorxy;
+	
+        ResponseEntity<Plans> re = planProxy.getPlansById(response.getPlanId());
+        response.setPlanData(re.getBody());
+		
+        ResponseEntity<List<Long>> fr = friendPorxy.getFriendsPhoneNumber(phoneNumber);
+        response.setFriendContacts(fr.getBody());
+
+Step-5) Run all the applications.
+
+        
+Step-6) Access the api
+
+         http://localhost:9094/customer/profile/7842128255
+
+Step-7) create instance for Plance service
+
+      -> Send the request in post man
+
+         it will send request to instance 1
+    
+         Send the request in post ma
+ 
+       It will send request to instance 2
+
+Note: Feign client will act as load balancer
+
+
+
+        
+
+

@@ -1,0 +1,7 @@
+package com.common.service;
+
+public interface FriendService {
+	
+	List<Long> readFriendsContacts(Long phoneNumber);
+	
+}

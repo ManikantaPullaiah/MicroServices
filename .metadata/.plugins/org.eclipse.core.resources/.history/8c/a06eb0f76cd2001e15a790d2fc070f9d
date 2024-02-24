@@ -1,0 +1,18 @@
+package com.common.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="Calldetails")
+public class CallDetailsEntity {
+	@Id
+	private Integer id;
+	private Long fromNumber;
+	private Long toNumber;
+	private LocalDateTime calledOn;
+	private Integer durationInSeconds;
+	
+
+}

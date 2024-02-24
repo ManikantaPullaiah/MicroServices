@@ -1,0 +1,28 @@
+package com.common.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.common.model.CallDetails;
+import com.common.repo.CallDetailsRepo;
+
+@Service
+public class CallDetailsServiceImpl implements CallDetailsService {
+
+	@Autowired
+	CallDetailsRepo repo;
+	@Override
+	public List<CallDetails> findCalldetailsFromNumber(Long fromNumber) {
+
+		return null;
+	}
+
+	@Override
+	public boolean addCalldetails(CallDetails details) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

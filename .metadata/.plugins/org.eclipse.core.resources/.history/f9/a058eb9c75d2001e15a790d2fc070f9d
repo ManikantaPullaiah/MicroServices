@@ -1,0 +1,13 @@
+package com.common.repo;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.common.entity.FriendEntity;
+
+public interface FriendsRepo extends JpaRepository<FriendEntity, Integer> {
+
+	@Query(value="SELECT FRIEND_NUMBER FROM FRIENDS WHERE PHONE_NUMBER=?",nativeQuery=true)
+	List<Long> fetchFriendContacts(Long phoneNumber);
+}

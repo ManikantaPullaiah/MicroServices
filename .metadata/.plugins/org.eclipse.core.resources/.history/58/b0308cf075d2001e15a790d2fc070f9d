@@ -1,0 +1,28 @@
+package com.common.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.common.entity.FriendEntity;
+import com.common.repo.FriendsRepo;
+
+@Service
+public class FriendServiceImpl implements FriendService {
+
+	@Autowired
+	FriendsRepo repo;
+	@Override
+	public List<Long> readFriendsContacts(Long phoneNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addFriendContact(FriendEntity entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

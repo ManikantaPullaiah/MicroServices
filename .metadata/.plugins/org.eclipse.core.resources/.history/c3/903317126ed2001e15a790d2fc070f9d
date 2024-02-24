@@ -1,0 +1,22 @@
+package com.common.service;
+
+import java.util.List;
+
+import com.common.model.CallDetails;
+
+@Service
+public class CallDetailsServiceImpl implements CallDetailsService {
+
+	@Override
+	public List<CallDetails> findCalldetailsFromNumber(Long fromNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addCalldetails(CallDetails details) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

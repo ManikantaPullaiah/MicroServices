@@ -1,0 +1,82 @@
+Spring Cloud GateWay Server:-
+=============================
+
+Step-1) Create a SB application with below dependencies
+         a) Devtools
+         b) Web
+         c) lombok
+         d) actutaor
+         e) Eureka Discovery Client
+         f) Gateway
+-------------------------------------------------------------------------------
+
+                       <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
+		</dependency>
+----------------------------------------------------------------------------------
+
+Step-2) add @EnableDiscoveryClient in SpringBoot application class
+          @SpringBootApplication
+	  @EnableDiscoveryClient
+	  public class Application {
+
+Step-3) add configuration details in application.properties files.
+       server.port=9096
+
+	spring.application.name=GATEWAY
+ 	eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+
+
+	management.endpoints.web.exposure.exclude=*
+
+	spring.cloud.gateway.discovery.locator.enabled=true
+
+Step-4) Run as gateway application
+
+Step-5) Access the application.
+           http://localhost:9096/actuator/gateway/routes
+
+
+
+
+
+
+Custom Routing:-
+==============
+Step-1):-
+-------
+        @Bean
+	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder)
+	{
+		    return builder.routes()
+		            .route("customer-service", p -> p.path("/c/**")
+		                    .filters(f -> f.rewritePath("/c/(?<segment>.*)", "/${segment}"))
+		                    .uri("lb://CUSTOMER-SERVICE"))
+		            .route("plans-service", p -> p.path("/p/**")
+		                    .filters(f -> f.rewritePath("/p/(?<segment>.*)", "/${segment}"))
+		                    .uri("lb://PLANS-SERVICE"))
+		            .route("friend-service", p -> p.path("/f/**")
+		                    .filters(f -> f.rewritePath("/f/(?<segment>.*)", "/${segment}"))
+		                    .uri("lb://FRIENDS-SERVICE"))
+		            .build();
+		}
+
+Step-2):-
+-------
+http://localhost:3006/c/api/customer/profile/9100920093
+
+http://localhost:3006/p/api/plans/all
+
+
+
+
+
+
+
+
+

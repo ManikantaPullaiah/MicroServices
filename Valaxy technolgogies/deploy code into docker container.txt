@@ -1,0 +1,97 @@
+Deploy the Code into Docker Container:-
+-------------------------------------
+Step-1) Create a tomcat container from dockerhub
+
+       a)  docker pull tomcat   
+       b) docker run -d --name tomcat-container -p 8081:8080 tomcat
+       c) docker exec -it tomcat-container /bin/bash
+       d) cd webapps.dist  --> cp -R * ../webapps
+       Note: Enable port number in security group 
+
+       Access the application with public ip (http://<public-ip>:8081)
+
+Step-2) Create a tomcat container form docker file.
+ 
+       a) Pull centos from dockerhub               - FROM
+       b) Install java                             - RUN
+       c) Create /opt/tomcat directory             - RUN
+       d) Change work directoy to /opt/tomcat      - WORKDIR
+       e) Download tomcat packages                 - ADD/RUN
+       f) Extract tar.gz file                      - RUN
+       g) Rename to tomcat directory               - RUN
+       h) Tell to docker that it runs on port 8080 - EXPOSE
+       i) Start tomcat services                    - CMD
+
+      ---------------------------------------------------------------
+        FROM centos: latest
+ 	RUN yum install java -y
+	RUN mkdir /opt/tomcat
+	WORKDIR /opt/tomcat
+	ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.85/bin/apache-tomcat-9.0.85.tar.gz /opt/tomcat .
+	RUN tar -xvzf apache-tomcat-9.0.85.tar.gz
+	RUN mv apache-tomcat-9.0.85.tar.gz/* /opt/tomcat
+	EXPOSE 8080
+	CMD ["/opt/tomcat/catalina.sh", "run"]
+     -------------------------------------------------------------------------
+
+
+
+Integrate Docker with Jenkins :-
+------------------------------
+    
+     1) create a dockeradmin user
+       useradd dockeradmin
+       passwd dockeradmin
+     2) add dokceradmin user docker group
+        usermod -aG docker dockeradmin
+     3) change permisions in sshd_config file
+        vi /etc/ssh/sshd_config
+       PasswordAuthentication : yes
+     4) service sshd reload
+     5) Install the plugins in manage plugins
+        Manage plaguns-> Availabe-> Publish over ssh
+     6) SSH Server-- >Name : dockerhost -> uname : dockeradmin -> pwd: dockeradmin 
+     7) creata new job with copy from build and deploy
+      send build artifacts over ssh
+      source files: webapp/target/*.war
+      remove prefix: webapp/target
+     8) save apply
+
+
+	cd /opt
+ 	mkdir docker 
+	ll
+	drwxr-xr-x. 2 root root  6 Feb 19 11:49 docker
+        chown -R dockeradmin:dockeradmin docker
+ 	cd /home/ec2-user
+         mv Dockerfile /opt/docker
+         chown -R dockeradmin:dockeradmin Dockerfile
+         source files: webapp/target/*.war
+         remove prefix: webapp/target
+         Remote directory: //opt//docker
+
+        vi Dockerfile
+
+         
+	FROM tomcat:latest
+	RUN cp -R /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+	COPY ./*.war /usr/local/tomcat/webapps
+
+
+Automate build and deploy docker container:-
+-----------------------------------------
+         source files: webapp/target/*.war
+         remove prefix: webapp/target
+         Remote directory: //opt//docker
+         Exec command: 
+        cd /opt/docker:
+         docker build -t regapp:v1 .;
+          docker run -d --name registerapp -p
+ 
+
+
+
+
+
+
+      

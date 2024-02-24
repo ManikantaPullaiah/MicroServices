@@ -1,0 +1,13 @@
+package com.common.model;
+
+import java.time.LocalDateTime;
+
+public class CallDetails {
+	
+	private Integer id;
+	private Long fromNumber;
+	private Long toNumber;
+	private LocalDateTime calledOn;
+	private Integer durationInSeconds;
+
+}

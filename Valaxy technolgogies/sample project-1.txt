@@ -1,0 +1,170 @@
+git
+jenkins
+maven
+ansible
+docker
+k8s
+Aws
+
+
+Manikanta 
+Ercevk@1123
+
+
+Steps-1) Install Jenkins
+
+         Note : Enable the 8080 port in security group which are running on jenkine ec2 instance
+
+Step-2) Integrate GitHub with jenkins
+
+         -> Install the git 
+             yum install git
+
+         -> Add github plug into jenkins manage plugins
+
+         -> configure the git into global  tools configurations
+            Name: Git
+            Path to Git executable: git
+
+Step-3) Pull Code from github
+           https://github.com/yankils/hello-world.git
+
+         Fork code from one repository to another repository
+           https://github.com/yankils/hello-world.git      -> Click on Fork --> add our repository credentials
+
+           https://github.com/ManikantaPullaiah/Sample-Project.git
+
+Step-4) Bild Now  --> Code will pulled into our localworkspace
+
+Step-5) Integrate Maven with Jenkins
+
+     -> Download maven
+    
+        https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+
+    -> 	tar xzvf apache-maven-3.9.6-bin.tar.gz
+
+
+    --------------------------------------------------------------------------------------------------------------------------
+     add java and maven path to environment variables    (find / -name jvm)
+
+         vi .basn_profile
+ 
+       
+        M2_HOME=/opt/maven
+        M2=/opt/maven/bin
+
+       JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.x86_64
+       PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2_HOME:$M2
+
+       echo $PATH
+
+       we need to restart the server then only the path varibale will be effected other we can use source command
+
+       source .bash_profile
+  ---------------------------------------------------------------------------------------------------------------------------------
+  -> Add Maven Integration plugin into jenkins plugins
+
+  -> add maven path to jenkins tools configuration
+  
+        add jdk---> 
+         Name : Java-17
+        Path  : /usr/lib/jvm/java-17-amazon-corretto.x86_64
+      add maven :
+       name: Maven-3.9.3
+       path: /opt/maven
+
+
+Step-6) Build Maven Project
+
+
+Step-7) Integrate Tomcat Server to Jenkins
+
+       1) Create a new instance
+       2) amazon-linux-extras      -> It will display all the softwars
+       3) amazon-linux-extras install java-openjdk11 
+       4) cd /opt
+       5) download tomcar 
+          https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.85/bin/apache-tomcat-9.0.85.tar.gz
+       6) Extract the tar file
+       7) goto bin folder and start the tomcat server
+       8) Enable the port number in securoty group
+       9) access the tomcat server with publi ip address
+            http://<public-ip>:8080
+      10) vi /home/ec2-user/tomcat/webapps/host-manager/META-INF/context.xml
+          <!-- <valve>------>  -->
+      11) vi /home/ec2-user/tomcat/webapps/manager/META-INF/context.xml
+          <!-- <valve>------>  -->
+      12) Update users information in the tomcat-users.xml file goto tomcat home directory and Add below users to conf/tomcat-users.xml file
+   	 <role rolename="manager-gui"/>
+	 <role rolename="manager-script"/>
+	 <role rolename="manager-jmx"/>
+ 	<role rolename="manager-status"/>
+	 <user username="admin" password="admin" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+	 <user username="deployer" password="deployer" roles="manager-script"/>
+	 <user username="tomcat" password="s3cret" roles="manager-gui"/>
+     13) Restart the server  and access application.
+
+
+
+Integration Tomcat with jenkins (Manullay):-
+-----------------------------------------
+      1) add tomcat credentials in jenkins manager credentials
+       manage jenkins -> Manage credentials -> system -> global credentials -> add some credentials-> uname(deployer) ->pwd(deployer).
+      2) Install to deploy to container plugi
+      3) create a new job and select git url and enter maven goals and post-build action select Deploy ear/war to a container option
+         War/ear name: **/*.war
+         contxt/path : NA
+        add container -> select tomcat 9  -> add credentials --> url (http://65.2.126.66:8080/)--> apply and save.
+
+Step-8) Deploy artifact in tomcat server
+      1) Clone the project
+      2) change the code in index.jsp
+      3) commit the code and push the code 
+         git push origin master
+
+      4) generate the token
+         go to github-> select account name -> settings -> Developer settings --> Personal acces tokesn-- > token -> generate person access token-->
+           name : Devops_token --> select all checkboxes  --> create
+     5) Build Now
+
+Step-7) Automate build and deploy using poll scm
+
+     Build trigger--> PollScm--> Schedular(* * * * *).
+
+                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1) Build and deploy on Tomcat Server
+  ===================================
+  Steup CI/CD with GitHub,Jenkins,Maven and Tomcat.
+
+2) Deploy Artifacrs on a Container
+  ====================================
+   Setup CI/CD with GitHub,Jenkins,Maven and Docker
+
+3) Deploy Artifacrs on a Container
+  ====================================
+     Setup CI/CD GitHUb,Jenkins,Maven, Ansible and Docker
+
+4) Deploy Artifacrs on  Kubernetes
+  ====================================
+   Setup CI/CD with GitHub,Jenkins,Maven,Ansible and Kubernets
+
+
+
+
+

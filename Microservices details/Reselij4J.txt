@@ -1,0 +1,122 @@
+Resilience4J:-
+==============
+  [ -> To avoid cascading failure in microservices.add self healing capabilites for microservices
+ 
+   [ one service fail should not impact on another service]  ]
+
+ -> In MicroServices,we have communication between services.
+ 
+ -> Suppose ,we have Service-1 ---> Service-2 ---> Service-3 communication
+    If Service-3 is down then Service-2 will get an exception,because of it service-1 also gets failed.
+    To avoid this kind of cascade failurers,we need to add resilience to the service.
+
+ -> Resilience means, adding capabilites to a service to recover quickly from failures.
+
+ -> Resilience4j library is provided to address some problems.
+  
+    1) How to avoid cascade failures.
+        Suppose if one service is failed or working slow then we need to make sure that the entire chain of microservices should not fail.
+
+    2) How do we handle the failures.
+      If one service is not working then we have to build a fallback mechansim 
+      to produce some alternatives values/default values without invoking that particular service.
+
+    3) How to make a service self healing capable.?
+       Suppose service-3 has network distrubance, may be if one more attempt is made to that service3 it may work.
+       If some time is given without passing any further requests,so that it can heal itself in some time.
+
+
+   -> Resilience4j offers some patterns like
+       Circuitbreaker: Used to stop making requests to a service when it is failing.
+       fallback: Alternative path to failing requests.
+       retry: Used to make retries when a service has temporarily failed.
+
+   -> 
+==========================================================================================================================================
+Step-1) add below dependencies into customer service
+        a) aop
+        b) actuator
+        c) 
+
+         <dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-spring-boot2</artifactId>
+    <version>2.2.0</version>
+	</dependency>
+
+  <dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-circuitbreaker</artifactId>
+    <version>2.2.0</version>
+  </dependency>
+
+  <dependency>
+    <groupId>io.github.resilience4j</groupId>
+    <artifactId>resilience4j-timelimiter</artifactId>
+    <version>2.2.0</version>
+  </dependency>
+
+Step-2)
+
+
+   	@GetMapping("/customer/profile/{phoneNumber}")
+	@CircuitBreaker(name="customerCircuitBreaker")
+	public ResponseEntity<CustomerResponse> viewProfile
+
+Step-3) add the configuration details in application.properties file
+       
+     management.endpoints.web.exposure.include=*
+     resilience4j.circuitbreaker.configs.default.register-health-indicator=true
+     resilience4j.circuitbreaker.instances.customerCircuitBreaker.minimum-number-of-calls=5
+     resilience4j.circuitbreaker.instances.customerCircuitBreaker.failure-rate-threshold=50
+     resilience4j.circuitbreaker.instances.customerCircuitBreaker.wait-duration-in-open-state=30000
+     resilience4j.circuitbreaker.instances.customerCircuitBreaker.permitted-number-of-calls-in-half-open-state=2
+=============================================================================================================================================
+b) Fallback Mechanisim:-
+  ====================
+
+Step-1) Create a fall back method with same syntax of original method.
+
+         public ResponseEntity<CustomerResponse> showProfileFallback(@PathVariable Long phoneNumber) {
+		System.out.println("fallback method called");
+		CustomerResponse response = service.fetchProfile(phoneNumber);
+		ResponseEntity<Plans> re = planProxy.getPlansById(response.getPlanId());
+		response.setPlanData(re.getBody());
+		response.setFriendContacts(new ArrayList<>());
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+
+Step-2) Add fallmethod name in circuit breaker annotation.
+       @CircuitBreaker(name="customerCircuitBreaker",fallbackMethod = "showProfileFallback")
+
+
+============================================================================================================
+c) retry:-
+  =======
+
+ Step-1) add @Retry annotation on method level
+          @GetMapping("/customer/profile/{phoneNumber}")
+	//@CircuitBreaker(name="customerCircuitBreaker",fallbackMethod = "showProfileFallback")
+	@Retry(name="friends-retry",fallbackMethod="showProfileFallback")
+
+Step-2) add configuration details in application.properties file
+
+       resilience4j.retry.instances.friends-retry.max-attempts=5
+      resilience4j.retry.instances.friends-retry.wait-duration=10000
+
+====================================================================================================================
+
+-> Circuit Breaker has 3 states
+    CLOSED     :    Initially the circuit breaker with closed state and accepts client requests.
+    OPEN       :    If circuit breaker sees a threshold percentage of requests are failing then it will OPEN the circuit.
+    HALF_OPEN  :    Periodically circuit breaker checks if the isssue is resolved or not by allowing few requests. 
+                    Based on the results,it will either go to CLOSED or OPEN.
+
+-> The retry pattern tells about how many times a service should try to connect with other service,before providing error response.
+
+
+
+
+
+

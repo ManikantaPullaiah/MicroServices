@@ -1,0 +1,9 @@
+package com.common.entity;
+
+import jakarta.persistence.Entity;
+
+@Entity
+@Table(name="Calldetails")
+public class CallDetailsEntity {
+
+}

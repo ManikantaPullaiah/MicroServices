@@ -1,0 +1,6 @@
+package com.common.controller;
+
+@RestController
+public class CallDetailsController {
+
+}

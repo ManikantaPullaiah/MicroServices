@@ -1,0 +1,8 @@
+package com.common.service;
+
+public interface CustomerService {
+	public boolean doRegistration(CutomerRequest request);
+	public boolean doLogin(LoginRequest request);
+	public CustomerResponse fetchProfile(Long phoneNumber);
+
+}

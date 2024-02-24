@@ -1,0 +1,24 @@
+package com.common.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.common.entity.FriendEntity;
+
+@Service
+public class FriendServiceImpl implements FriendService {
+
+	@Override
+	public List<Long> readFriendsContacts(Long phoneNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addFriendContact(FriendEntity entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

@@ -1,0 +1,5 @@
+package com.common.mapper;
+
+public class ModelEntityMapper {
+
+}

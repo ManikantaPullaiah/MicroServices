@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;FriendEntity.java&apos; to &apos;04-Customer-Service/src/main/java/com.common.model&apos;&#x0D;&#x0A;- Original project: &apos;03-Friend-Service&apos;&#x0D;&#x0A;- Destination element: &apos;04-Customer-Service/src/main/java/com.common.model&apos;&#x0D;&#x0A;- Original element: &apos;com.common.entity.FriendEntity.java&apos;" description="Copy compilation unit" destination="=04-Customer-Service/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.common.model" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.common.entity{FriendEntity.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1708713842490" units="1" version="1.0"/>
+</session>

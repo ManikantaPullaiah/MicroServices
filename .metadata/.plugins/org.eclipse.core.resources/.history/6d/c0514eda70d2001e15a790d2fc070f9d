@@ -1,0 +1,9 @@
+package com.common.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.common.entity.PlanEntity;
+
+public interface PlansRepo extends JpaRepository<PlanEntity, String> {
+
+}

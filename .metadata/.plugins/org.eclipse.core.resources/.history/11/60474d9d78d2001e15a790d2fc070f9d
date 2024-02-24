@@ -1,0 +1,42 @@
+package com.common.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="FRIENDS")
+public class FriendEntity {
+	
+	@Id
+	private Integer id;
+	
+	private Long phoneNumber;
+	private Long friendNumber;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public Long getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(Long phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public Long getFrinedNumber() {
+		return frinedNumber;
+	}
+	public void setFrinedNumber(Long frinedNumber) {
+		this.frinedNumber = frinedNumber;
+	}
+	@Override
+	public String toString() {
+		return "FriendEntity [id=" + id + ", phoneNumber=" + phoneNumber + ", frinedNumber=" + frinedNumber + "]";
+	}
+	
+	
+
+}

@@ -1,0 +1,9 @@
+package com.common.model;
+
+public class Plans {
+	private String planId;
+	private String mode;
+	private String description;
+	private String validity;
+	private Double price;
+}

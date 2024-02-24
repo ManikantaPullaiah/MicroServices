@@ -1,0 +1,34 @@
+create database db1
+use db1;
+select * from customers;
+select * from calldetails;
+select * from plans;
+insert into customers(id,called_on,duration_in_seconds,from_number,to_number)values(100,'2020-10-10T4:19',25,7842128255,9964642686);
+
+insert into customers(id,called_on,duration_in_seconds,from_number,to_number)values(200,'2020-10-10T4:19',25,7842128255,7975135527);
+commit;
+
+insert into plans(plan_id,description,mode,price,validity)values('PLAN-299','4GB/DAY','POSTPAID',400,'48DAYS');
+
+insert into plans(plan_id,description,mode,price,validity)values('PLAN-399','6GB/DAY','PREPAID',600,'68DAYS');
+
+insert into plans(plan_id,description,mode,price,validity)values('PLAN-499','8GB/DAY','PREPAID',800,'88DAYS');
+
+
+properties file:-
+==================
+
+
+
+server.port=3002
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/db1
+spring.datasource.username=root
+spring.datasource.password=root
+
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.properties.hibernate.formate_sql=true
+
+spring.main.banner-mode=off

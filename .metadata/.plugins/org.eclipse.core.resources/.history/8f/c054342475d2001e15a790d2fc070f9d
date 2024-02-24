@@ -1,0 +1,15 @@
+package com.common.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="FRIENDS")
+public class FriendEntity {
+	
+	private Integer id;
+	
+	private Long phoneNumber;
+	private Long frinedNumber;
+
+}

@@ -1,0 +1,16 @@
+package com.common.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.common.service.PlanService;
+
+@RestController
+public class PlanController {
+	
+	@Autowired
+	PlanService service;
+	
+	
+
+}
